@@ -1,10 +1,22 @@
+" colorcheme
+colorscheme torte
+
+" syntax
 syntax on
-syntax enable
+
+" tabの空白数
 set tabstop=4
+
+" 編集中の行hilight(colorschemeの後に記載すること)
+set cursorline
 hi clear CursorLine
+
+" 検索のhilight
 set hlsearch
+
+" statuslineを常に表示
 set laststatus=2
-colorscheme industry
+
 
 let g:airline#extensions#git#enabled = 1
 
