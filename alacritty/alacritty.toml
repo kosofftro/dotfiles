@@ -1,0 +1,8 @@
+[[keyboard.bindings]]
+chars = '\'
+key = "¥"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "Insert"
+mods = "Shift"
