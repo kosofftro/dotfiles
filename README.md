@@ -1,7 +1,7 @@
 # 概要
 macのホームディレクトリ配下デプロイ用ファイル群
 
-# ディレクトリ構成
+## ディレクトリ構成
 ```
 .
 ├── README.md
@@ -15,5 +15,30 @@ macのホームディレクトリ配下デプロイ用ファイル群
 ├── vim
 │   └── .vimrc
 └── zsh
-    └── .vimrc
+    └── zshrc
+```
+
+## 配置パス
+### alacritty.yml
+PATH
+```
+~/.config/alacritty/alacritty.yml
+```
+
+### tmux
+PATH
+```
+ ~/.tmux.conf
+```
+
+### vim
+PATH
+```
+~/.vimrc
+```
+
+### zshrc
+PATH
+```
+/etc/zshrc
 ```
