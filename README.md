@@ -14,6 +14,8 @@ macのホームディレクトリ配下デプロイ用ファイル群
 │   └── .tmux.conf
 ├── vim
 │   └── .vimrc
+├── taskwarrior
+│   └── .taskrc
 └── zsh
     └── zshrc
 ```
@@ -35,6 +37,12 @@ PATH
 PATH
 ```
 ~/.vimrc
+```
+
+### vim
+PATH
+```
+~/.taskrc
 ```
 
 ### zshrc
