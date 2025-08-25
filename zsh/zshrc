@@ -1,80 +1,49 @@
-# System-wide profile for interactive zsh(1) shells.
+### Environment
+# Language
+export LANG=ja_JP.UTF-8
+# ローカルコマンド追加
+export PATH="${PATH}:/Users/${USER}/bin"
+# ヒストリの設定
+export HISTFILE=~/.zsh_history
+export HISTSIZE=10000
+export SAVEHIST=100000
 
-# Setup user specific overrides for this in ~/.zshrc. See zshbuiltins(1)
-# and zshoptions(1) for more details.
-
-# Correctly display UTF-8 with combining characters.
-if [[ "$(locale LC_CTYPE)" == "UTF-8" ]]; then
-    setopt COMBINING_CHARS
-fi
-
-# Disable the log builtin, so we don't conflict with /usr/bin/log
-disable log
-
-# Save command history
-HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-HISTSIZE=2000
-SAVEHIST=1000
-
-# Beep on error
-setopt BEEP
-
-# Use keycodes (generated via zkbd) if present, otherwise fallback on
-# values from terminfo
-if [[ -r ${ZDOTDIR:-$HOME}/.zkbd/${TERM}-${VENDOR} ]] ; then
-    source ${ZDOTDIR:-$HOME}/.zkbd/${TERM}-${VENDOR}
-else
-    typeset -g -A key
-
-    [[ -n "$terminfo[kf1]" ]] && key[F1]=$terminfo[kf1]
-    [[ -n "$terminfo[kf2]" ]] && key[F2]=$terminfo[kf2]
-    [[ -n "$terminfo[kf3]" ]] && key[F3]=$terminfo[kf3]
-    [[ -n "$terminfo[kf4]" ]] && key[F4]=$terminfo[kf4]
-    [[ -n "$terminfo[kf5]" ]] && key[F5]=$terminfo[kf5]
-    [[ -n "$terminfo[kf6]" ]] && key[F6]=$terminfo[kf6]
-    [[ -n "$terminfo[kf7]" ]] && key[F7]=$terminfo[kf7]
-    [[ -n "$terminfo[kf8]" ]] && key[F8]=$terminfo[kf8]
-    [[ -n "$terminfo[kf9]" ]] && key[F9]=$terminfo[kf9]
-    [[ -n "$terminfo[kf10]" ]] && key[F10]=$terminfo[kf10]
-    [[ -n "$terminfo[kf11]" ]] && key[F11]=$terminfo[kf11]
-    [[ -n "$terminfo[kf12]" ]] && key[F12]=$terminfo[kf12]
-    [[ -n "$terminfo[kf13]" ]] && key[F13]=$terminfo[kf13]
-    [[ -n "$terminfo[kf14]" ]] && key[F14]=$terminfo[kf14]
-    [[ -n "$terminfo[kf15]" ]] && key[F15]=$terminfo[kf15]
-    [[ -n "$terminfo[kf16]" ]] && key[F16]=$terminfo[kf16]
-    [[ -n "$terminfo[kf17]" ]] && key[F17]=$terminfo[kf17]
-    [[ -n "$terminfo[kf18]" ]] && key[F18]=$terminfo[kf18]
-    [[ -n "$terminfo[kf19]" ]] && key[F19]=$terminfo[kf19]
-    [[ -n "$terminfo[kf20]" ]] && key[F20]=$terminfo[kf20]
-    [[ -n "$terminfo[kbs]" ]] && key[Backspace]=$terminfo[kbs]
-    [[ -n "$terminfo[kich1]" ]] && key[Insert]=$terminfo[kich1]
-    [[ -n "$terminfo[kdch1]" ]] && key[Delete]=$terminfo[kdch1]
-    [[ -n "$terminfo[khome]" ]] && key[Home]=$terminfo[khome]
-    [[ -n "$terminfo[kend]" ]] && key[End]=$terminfo[kend]
-    [[ -n "$terminfo[kpp]" ]] && key[PageUp]=$terminfo[kpp]
-    [[ -n "$terminfo[knp]" ]] && key[PageDown]=$terminfo[knp]
-    [[ -n "$terminfo[kcuu1]" ]] && key[Up]=$terminfo[kcuu1]
-    [[ -n "$terminfo[kcub1]" ]] && key[Left]=$terminfo[kcub1]
-    [[ -n "$terminfo[kcud1]" ]] && key[Down]=$terminfo[kcud1]
-    [[ -n "$terminfo[kcuf1]" ]] && key[Right]=$terminfo[kcuf1]
-fi
-
-# Default key bindings
-[[ -n ${key[Delete]} ]] && bindkey "${key[Delete]}" delete-char
-[[ -n ${key[Home]} ]] && bindkey "${key[Home]}" beginning-of-line
-[[ -n ${key[End]} ]] && bindkey "${key[End]}" end-of-line
-[[ -n ${key[Up]} ]] && bindkey "${key[Up]}" up-line-or-search
-[[ -n ${key[Down]} ]] && bindkey "${key[Down]}" down-line-or-search
-
-# Default prompt
-PS1="%n@%m %1~ %# "
-
-# Useful support for interacting with Terminal.app or other terminal programs
-[ -r "/etc/zshrc_$TERM_PROGRAM" ] && . "/etc/zshrc_$TERM_PROGRAM"
+### Alias
+alias history='history -t "%F %T"'
 alias ll='ls -ltr'
 
+### zsh
+# 時間表記の追加
+setopt extended_history
+# beep を無効にする
+setopt no_beep
+# フローコントロールを無効にする(ctrl + S無効化)
+setopt no_flow_control
+# Ctrl+Dでzshを終了しない
+setopt ignore_eof
+# '#' 以降をコメントとして扱う
+setopt interactive_comments
+# ディレクトリ名だけでcdする
+setopt auto_cd
+# 同時に起動したzshの間でヒストリを共有する
+setopt share_history
 
-# git
+### AutoCompletetion
+# 拡張Completion有効化
+autoload -Uz compinit
+compinit
+# ../ の後は今いるディレクトリを補完しない
+zstyle ':completion:*' ignore-parents parent pwd ..
+# sudo の後ろでコマンド名を補完する
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+# ps コマンドのプロセス名補完
+zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
+ 
+### KeyBind
+# ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
+bindkey '^R' history-incremental-pattern-search-backward
+
+### Git
 autoload -Uz vcs_info
 setopt prompt_subst
 zstyle ':vcs_info:git:*' check-for-changes true
@@ -83,11 +52,10 @@ zstyle ':vcs_info:git:*' unstagedstr "%F{yellow}+"
 zstyle ':vcs_info:*' formats "%F{cyan}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 precmd () { vcs_info }
-
-# プロンプトカスタマイズ
+ 
+### Prompt
+# zshカスタムプロンプト
 PROMPT='
-[%B%F{red}%n@%m%f%b:%F{green}%~%f]%F{cyan}$vcs_info_msg_0_%f
+[%B%F{blue}%n@%m%f%b:%F{green}%~%f]%F{cyan}$vcs_info_msg_0_%f
 %F{yellow}$%f '
 
-# ローカルコマンド追加
-PATH="${PATH}:/Users/${USER}/bin"
