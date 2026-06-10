@@ -1,5 +1,6 @@
 " 文字コード
 set encoding=utf-8
+set fileencoding=utf-8
 
 " colorcheme
 colorscheme torte
@@ -17,9 +18,6 @@ set mouse=
 set cursorline
 hi clear CursorLine
 
-" 検索のhilight
-set hlsearch
-
 " statuslineを常に表示
 set laststatus=2
 
@@ -29,12 +27,35 @@ set completeopt=menuone,noinsert
 " Alacritty用のBracketedPaste無効化
 set t_BE=
 
-" 全Window終了(ZZ、ZQのオマージュ)
+" 全Window終了(ZZ、ZQのオマージュ)(vimdiffクローズ)
 nnoremap ZA :qa<CR> 
 
 " vimdiffの差分折りたたみ
 set diffopt=filler,context:1000000
 
+" 矩形選択時に文字が無い区間を選択可能
+set virtualedit+=block
+
+" メッセージ表示欄を2行確保
+set cmdheight=2
+
+" バックアップファイルを作らない
+set nobackup
+
+" スワップファイルを作成しない
+set noswapfile
+
+" タイトルを表示
+set title
+
+" 検索のhilight
+set hlsearch
+
+" 検索文字列が小文字の場合は大文字小文字を区別なく検索する
+:set ignorecase smartcase
+
+" 検索のループ禁止
+set nowrapscan
 
 " Vundleの設定
 set rtp+=~/.vim/bundle/Vundle.vim
